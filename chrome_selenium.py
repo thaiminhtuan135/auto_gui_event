@@ -140,7 +140,6 @@ driver.execute_script("localStorage.setItem('end_date', arguments[0]);", end_dat
 driver.execute_script("location.reload();")
 sleep(1)
 # ✌️ prestige_roulette
-# handle_alert(driver)
 perform_action(driver, "prestige_roulette_link", "submit_button_prestige_roulette", wait)
 # ✌️ roulette
 perform_action(driver, "roulette_link", "submit_button_roulette", wait)
