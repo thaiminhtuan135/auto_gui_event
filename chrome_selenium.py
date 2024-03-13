@@ -21,18 +21,23 @@ class EventString(Enum):
     SALE = 'HẢI TẶC ĐẤU GIÁ'
     PRESTIGE_ROULETTE = 'Vòng quay danh vọng'
     ROULETTE = 'Vòng quay kinh nghiệm'
+    JIERI_SHOP = 'THƯƠNG THÀNH TÍCH LUỸ'
+    GUAGUALE = 'CÀO TRÚNG THƯỞNG'
 
 
-class EventBoolean(Enum):
-    PAY_AGAIN_REWARD = True  # lễ bao thời hạn
-    LUCKY_POINTER = False  # quay số may mắn
-    XIAOFEI_LEIJI = False  # tích lũy tiêu phí
-    DISCOUNT_ACTIVITY = False  # thương nhân hải tặc
-    CARD_ACTIVITY = False  # thu tập thẻ bài
-    SUMMER_ONLINE_PRIZE = False  # vui vẻ online
-    SALE = False  # đấu giá
-    PRESTIGE_ROULETTE = True  # vòng quay danh vọng
-    ROULETTE = True  # vòng quay kinh nghiệm
+event_booleans = {
+    "PAY_AGAIN_REWARD": True,  # lễ bao thời hạn
+    "LUCKY_POINTER": False,  # quay số may mắn
+    "XIAOFEI_LEIJI": False,  # tích lũy tiêu phí
+    "DISCOUNT_ACTIVITY": False,  # thương nhân hải tặc
+    "CARD_ACTIVITY": False,  # thu tập thẻ bài
+    "SUMMER_ONLINE_PRIZE": False,  # vui vẻ online
+    "SALE": False,  # đấu giá
+    "PRESTIGE_ROULETTE": True,  # vòng quay danh vọng
+    "ROULETTE": True,  # vòng quay kinh nghiệm
+    "JIERI_SHOP": False,  # thương thành tích lũy
+    "GUAGUALE": False  # cào trúng thưởng
+}
 
 
 def perform_action(driver, link_id, button_id, wait):
@@ -99,19 +104,22 @@ sleep(1)
 start_date = ''
 end_date = ''
 paragraphs = driver.find_elements(By.TAG_NAME, 'strong')
-# for event in paragraphs:
-#     if event.text == EventString.XIAOFEI_LEIJI:
-#         EventBoolean.XIAOFEI_LEIJI = True
-#     if event.text == EventString.DISCOUNT_ACTIVITY:
-#         EventBoolean.DISCOUNT_ACTIVITY = True
-#     if event.text == EventString.LUCKY_POINTER:
-#         EventBoolean.LUCKY_POINTER = True
-#     if event.text == EventString.CARD_ACTIVITY:
-#         EventBoolean.CARD_ACTIVITY = True
-#     if event.text == EventString.SUMMER_ONLINE_PRIZE:
-#         EventBoolean.SUMMER_ONLINE_PRIZE = True
-#     if event.text == EventString.SALE:
-#         EventBoolean.SALE = True
+for event in paragraphs:
+    if EventString.XIAOFEI_LEIJI.value in event.text:
+        event_booleans["XIAOFEI_LEIJI"] = True
+    if EventString.DISCOUNT_ACTIVITY.value in event.text:
+        event_booleans["DISCOUNT_ACTIVITY"] = True
+    if EventString.LUCKY_POINTER.value in event.text:
+        event_booleans["LUCKY_POINTER"] = True
+    if EventString.CARD_ACTIVITY.value in event.text:
+        event_booleans["CARD_ACTIVITY"] = True
+    if EventString.SUMMER_ONLINE_PRIZE.value in event.text:
+        event_booleans["SUMMER_ONLINE_PRIZE"] = True
+    if EventString.SALE.value in event.text:
+        event_booleans["SALE"] = True
+    if EventString.JIERI_SHOP.value in event.text:
+        event_booleans["JIERI_SHOP"] = True
+    print(event.text)
 
 for element in paragraphs:
     if 'ngày' in element.text:
@@ -139,11 +147,71 @@ driver.execute_script("localStorage.setItem('start_date', arguments[0]);", start
 driver.execute_script("localStorage.setItem('end_date', arguments[0]);", end_date)
 driver.execute_script("location.reload();")
 sleep(1)
-# ✌️ prestige_roulette
+# ✌️ PRESTIGE_ROULETTE
 perform_action(driver, "prestige_roulette_link", "submit_button_prestige_roulette", wait)
-# ✌️ roulette
+
+# ✌️ ROULETTE
 perform_action(driver, "roulette_link", "submit_button_roulette", wait)
-# ✌️ Pay again reward
+
+# ✌️ PAY AGAIN REWARD
 perform_action(driver, "payAgainreward_link", "submit_button_payagainreward", wait)
+
+# ✌️ SUMMER ONLINE PRIZE
+if event_booleans["SUMMER_ONLINE_PRIZE"]:
+    perform_action(driver, "summer_online_prize_link", "submit_button_summeronlineprize", wait)
+
+# ✌️ CARD ACTIVITY
+if event_booleans["CARD_ACTIVITY"]:
+    perform_action(driver, "card_activity_link", "submit_button_cardactivity", wait)
+
+# ✌️ LUCKY_POINTER
+if event_booleans["LUCKY_POINTER"]:
+    perform_action(driver, "luckyPointer_link", "submit_button_LuckyPointer", wait)
+
+# ✌️ DISCOUNT_ACTIVITY
+if event_booleans["DISCOUNT_ACTIVITY"]:
+    perform_action(driver, "discount_activity_link", "submit_button_discountactivity", wait)
+
+# ✌️ XIAOFEI_LEIJI
+if event_booleans["XIAOFEI_LEIJI"]:
+    perform_action(driver, "xiaofei_leiji_link", "submit_button_xiaofeileiji", wait)
+
+# ✌️ JIERI_SHOP
+if event_booleans["JIERI_SHOP"]:
+    perform_action(driver, "jieri_shop_link", "submit_button_jierishop", wait)
+
+# ✌️ SALE
+if event_booleans["SALE"]:
+    perform_action(driver, "sale_link", "submit_button_sale", wait)
+
+# ✌️ OBT_ACTIVITY
+sleep(2)
+obt_activity_link = wait.until(EC.presence_of_element_located((By.ID, "obtActivity_link")))
+obt_activity_link.click()
+sleep(0.5)
+if event_booleans["DISCOUNT_ACTIVITY"]:
+    checkbox_element = wait.until(EC.presence_of_element_located((By.ID, "checkbox_discount_activity")))
+    driver.execute_script("arguments[0].checked = true;", checkbox_element)
+if event_booleans["JIERI_SHOP"]:
+    checkbox_element = wait.until(EC.presence_of_element_located((By.ID, "checkbox_jieri_shop")))
+    driver.execute_script("arguments[0].checked = true;", checkbox_element)
+if event_booleans["SUMMER_ONLINE_PRIZE"]:
+    checkbox_element = wait.until(EC.presence_of_element_located((By.ID, "checkbox_summer_online_prize")))
+    driver.execute_script("arguments[0].checked = true;", checkbox_element)
+if event_booleans["XIAOFEI_LEIJI"]:
+    checkbox_element = wait.until(EC.presence_of_element_located((By.ID, "checkbox_xiaofei_leiji")))
+    driver.execute_script("arguments[0].checked = true;", checkbox_element)
+if event_booleans["CARD_ACTIVITY"]:
+    checkbox_element = wait.until(EC.presence_of_element_located((By.ID, "checkbox_card_activity")))
+    driver.execute_script("arguments[0].checked = true;", checkbox_element)
+if event_booleans["LUCKY_POINTER"]:
+    checkbox_element = wait.until(EC.presence_of_element_located((By.ID, "checkbox_lucky_pointer")))
+    driver.execute_script("arguments[0].checked = true;", checkbox_element)
+sleep(0.5)
+button_obt_activity = wait.until(EC.presence_of_element_located((By.ID, "submit_button_obtactivity")))
+button_obt_activity.click()
+handle_alert(driver)
+
+
 
 sleep(100)
