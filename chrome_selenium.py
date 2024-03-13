@@ -35,6 +35,16 @@ class EventBoolean(Enum):
     ROULETTE = True  # vòng quay kinh nghiệm
 
 
+def perform_action(driver, link_id, button_id, wait):
+    sleep(2)
+    link = wait.until(EC.presence_of_element_located((By.ID, link_id)))
+    link.click()
+    sleep(0.5)
+    button = wait.until(EC.presence_of_element_located((By.ID, button_id)))
+    button.click()
+    handle_alert(driver)
+
+
 def handle_alert(driver, timeout=10):
     try:
         # Chờ cho cảnh báo xuất hiện
@@ -128,29 +138,13 @@ driver.get("http://localhost:3000/index.php")
 driver.execute_script("localStorage.setItem('start_date', arguments[0]);", start_date)
 driver.execute_script("localStorage.setItem('end_date', arguments[0]);", end_date)
 driver.execute_script("location.reload();")
-# ✌️ prestige_roulette
 sleep(1)
-prestige_roulette_link = wait.until(EC.presence_of_element_located((By.ID, "prestige_roulette_link")))
-prestige_roulette_link.click()
-sleep(0.5)
-prestige_roulette_button = wait.until(EC.presence_of_element_located((By.ID, "submit_button_prestige_roulette")))
-prestige_roulette_button.click()
-handle_alert(driver)
+# ✌️ prestige_roulette
+# handle_alert(driver)
+perform_action(driver, "prestige_roulette_link", "submit_button_prestige_roulette", wait)
 # ✌️ roulette
-sleep(2)
-roulette_link = wait.until(EC.presence_of_element_located((By.ID, "roulette_link")))
-roulette_link.click()
-sleep(0.5)
-roulette_button = wait.until(EC.presence_of_element_located((By.ID, "submit_button_roulette")))
-roulette_button.click()
-handle_alert(driver)
-# Pay again reward
-sleep(2)
-payAgainreward_link = wait.until(EC.presence_of_element_located((By.ID, "payAgainreward_link")))
-payAgainreward_link.click()
-sleep(0.5)
-pay_again_reward_button = wait.until(EC.presence_of_element_located((By.ID, "submit_button_payagainreward")))
-pay_again_reward_button.click()
-handle_alert(driver)
+perform_action(driver, "roulette_link", "submit_button_roulette", wait)
+# ✌️ Pay again reward
+perform_action(driver, "payAgainreward_link", "submit_button_payagainreward", wait)
 
 sleep(100)
