@@ -70,7 +70,7 @@ sleep(1)
 
 pyautogui.hotkey('win', 'up')
 pyautogui.click(pyautogui.position(410, 70))  # click url
-pyautogui.write("http://article.haitacviet.com/wp-login.php")
+pyautogui.write("http://article.oplegend.com/wp-login.php")
 pyautogui.press("enter")
 # sleep(2)
 # wait login
