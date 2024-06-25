@@ -21,7 +21,7 @@ class EventString(Enum):
     DISCOUNT_ACTIVITY = 'THƯƠNG NHÂN - TÂN THẾ GIỚI'
     CARD_ACTIVITY = 'THU THẬP THẺ BÀI'
     SUMMER_ONLINE_PRIZE = 'VUI VẺ ONLINE'
-    SALE = 'HẢI TẶC ĐẤU GIÁ'
+    SALE = 'HẢI TẶC ĐẤU GIÁ (ĐẤU GIÁ MINI)'
     PRESTIGE_ROULETTE = 'Vòng quay danh vọng'
     ROULETTE = 'Vòng quay kinh nghiệm'
     JIERI_SHOP = 'THƯƠNG THÀNH TÍCH LUỸ'
@@ -97,12 +97,12 @@ elementPosts = wait.until(EC.presence_of_element_located((By.XPATH, "//*[@id='me
 elementPosts.click()
 
 stringEvent = '[Event/HĐ] Chuỗi Event Hoạt Động'
-target_elements = driver.find_elements(By.XPATH, f"//a[contains(@aria-label, '{stringEvent}') and text()='Xem']")
+target_elements = driver.find_elements(By.XPATH, f"//a[contains(@aria-label, '{stringEvent}') and text()='Xem thử']")
 
 sleep(1)
 # Scroll đến phần tửs
 # driver.execute_script("arguments[0].scrollIntoView(true);", target_elements[0])
-driver.execute_script("arguments[0].click();", target_elements[1])
+driver.execute_script("arguments[0].click();", target_elements[0])
 #  set value start_date , end_date
 start_date = ''
 end_date = ''
